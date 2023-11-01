@@ -38,6 +38,8 @@ def train_one_epoch(model: torch.nn.Module, criterion: torch.nn.Module,
 
         outputs = model(samples)
         loss_dict = criterion(outputs, targets)
+        del outputs, targets
+        torch.cuda.empty_cache()
         weight_dict = criterion.weight_dict
         losses = sum(loss_dict[k] * weight_dict[k] for k in loss_dict.keys() if k in weight_dict)
 
@@ -58,6 +60,8 @@ def train_one_epoch(model: torch.nn.Module, criterion: torch.nn.Module,
 
         optimizer.zero_grad()
         losses.backward()
+        del loss_dict, losses
+        torch.cuda.empty_cache()
         if max_norm > 0:
             torch.nn.utils.clip_grad_norm_(model.parameters(), max_norm)
         optimizer.step()
@@ -68,6 +72,9 @@ def train_one_epoch(model: torch.nn.Module, criterion: torch.nn.Module,
         metric_logger.update(obj_error=loss_dict_reduced['obj_error'])
         metric_logger.update(rel_error=loss_dict_reduced['rel_error'])
         metric_logger.update(lr=optimizer.param_groups[0]["lr"])
+
+        del loss_dict_reduced, loss_dict_reduced_unscaled, loss_dict_reduced_scaled, loss_value
+        torch.cuda.empty_cache()
 
     # gather the stats from all processes
     metric_logger.synchronize_between_processes()
