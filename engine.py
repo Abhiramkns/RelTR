@@ -148,7 +148,7 @@ def evaluate(model, criterion, postprocessors, data_loader, base_ds, device, arg
         metric_logger.update(sub_error=loss_dict_reduced['sub_error'])
         metric_logger.update(obj_error=loss_dict_reduced['obj_error'])
         metric_logger.update(rel_error=loss_dict_reduced['rel_error'])
-        del loss_dict_reduced, loss_dict_reduced_unscaled, loss_dict_reduced_scaled, loss_value
+        del loss_dict_reduced, loss_dict_reduced_unscaled, loss_dict_reduced_scaled
         torch.cuda.empty_cache()
         if args.dataset == 'vg':
             evaluate_rel_batch(outputs, targets, evaluator, evaluator_list)
