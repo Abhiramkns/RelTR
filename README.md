@@ -48,12 +48,13 @@ If you want to **infer an image**, only python=3.6, PyTorch=1.6 and matplotlib a
 You can configure the environment as follows:
 ```
 # create a conda environment 
-conda create -n reltr python=3.6
+conda create -n reltr python=3.10
 conda activate reltr
 
 # install packages
-conda install pytorch==1.6.0 torchvision==0.7.0 cudatoolkit=10.1 -c pytorch
+conda install pytorch torchvision torchaudio pytorch-cuda=11.8 -c pytorch -c nvidia
 conda install matplotlib
+conda install cython
 ```
 
 ## Training/Evaluation on Visual Genome or Open Images V6
